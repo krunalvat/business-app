@@ -108,7 +108,10 @@
                         
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">{{ __('Register') }}</button>
+                            <button type="submit" class="btn btn-primary register-submit">{{ __('Save') }}
+                                <div class="spinner-border d-none" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                                </div></button>
                             </div>
                         </div>
                     </form>
@@ -121,15 +124,13 @@
 
 @section('scripts')
     <script>
-        const authToken = localStorage.getItem('auth_token');
-        
-        if (!authToken) {
-            window.location.href = "{{ route('login') }}";
-        }
         $("#registerForm")[0].reset();
         $(document).ready(function() {
             $('#registerForm').submit(function(e) {
                 e.preventDefault();
+
+                $(".register-submit").prop("disabled", true);
+                $('#registerForm').find(".spinner-border").removeClass("d-none");
 
                 let form = $(this);
                 let url = form.attr("action");
@@ -148,6 +149,8 @@
                         $('body').prepend(`<div class="alert alert-success">${response.message}</div>`);
                         localStorage.removeItem('success_message');
                         localStorage.setItem('auth_token', response.token);
+                        $(".register-submit").prop("disabled", false);
+					    $('#registerForm').find(".spinner-border").removeClass("d-none");
                         setTimeout(() => {
                             window.location.href = '/login';
                         }, 1000);
@@ -157,6 +160,8 @@
                             $(".print-msg-" + key + "").css("display", "block");
                             $(".print-msg-" + key + "").html(value[0]);
                         });
+                        $(".register-submit").prop("disabled", false);
+				        $('#registerForm').find(".spinner-border").addClass("d-none");
                     }
                 });
             });

@@ -112,7 +112,9 @@
                         
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
+                                <button type="submit" class="btn btn-primary profile-submit">{{ __('Update') }}<div class="spinner-border d-none" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                                </div></button>
                             </div>
                         </div>
                     </form>
@@ -137,7 +139,8 @@
         }
         $('#updateProfileForm').submit(function(e) {
             e.preventDefault();
-
+            $(".profile-submit").prop("disabled", true);
+            $('#updateProfileForm').find(".spinner-border").removeClass("d-none");
             let form = $(this);
             let url = form.attr("action");
             let formData = new FormData(this);  // Ensure you're creating the FormData object correctly
@@ -153,6 +156,8 @@
                 success: function(response) {
                     $('body').prepend(`<div class="alert alert-success">${response.message}</div>`);
                     localStorage.removeItem('success_message');
+                    $(".profile-submit").prop("disabled", false);
+                    $('#updateProfileForm').find(".spinner-border").removeClass("d-none");
                     setTimeout(() => {
                         window.location.href = '/home';
                     }, 1000);
@@ -162,6 +167,8 @@
                         $(".print-msg-" + key + "").css("display", "block");
                         $(".print-msg-" + key + "").html(value[0]);
                     });
+                    $(".profile-submit").prop("disabled", false);
+                    $('#updateProfileForm').find(".spinner-border").addClass("d-none");
                 }
             });
         });
