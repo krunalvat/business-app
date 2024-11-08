@@ -22,8 +22,8 @@ class UserController extends Controller
      */
     public function profile() {
         $user = auth('api')->user();
-        $user['square_icon'] = isset($user->square_icon) && Storage::disk('public')->exists($data->square_icon) ? getUrl($user->square_icon): asset('images/avtar.png');
-        $user['background_image'] = isset($user->background_image) && Storage::disk('public')->exists($data->background_image) ? getUrl($user->background_image) : asset('images/avtar.png');
+        $user['square_icon'] = isset($user->square_icon) && Storage::disk('public')->exists($user->square_icon) ? getUrl($user->square_icon): asset('images/avtar.png');
+        $user['background_image'] = isset($user->background_image) && Storage::disk('public')->exists($user->background_image) ? getUrl($user->background_image) : asset('images/avtar.png');
         return $this->sendResponse($user, __('Retrieved successfully'));
     }
 
